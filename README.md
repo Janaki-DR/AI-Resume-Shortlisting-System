@@ -11,11 +11,11 @@ This system analyzes resume text and compares it with the required skills for th
 4. A match percentage is calculated.
 5. If the score meets the threshold, the candidate is shortlisted.
 ## Technologies used
--Pyhton
--Streamlit
--Skill matching logic 
+- Pyhton
+- Streamlit
+- Skill matching logic 
 ## Future scope
--Resume PDF upload
--NLP-based resume analysis
--Integration with recruitment platforms
+- Resume PDF upload
+- NLP-based resume analysis
+- Integration with recruitment platforms
 
