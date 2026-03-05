@@ -12,7 +12,7 @@ This system analyzes resume text and compares it with the required skills for th
 5. If the score meets the threshold, the candidate is shortlisted.
 ## Technologies used
 -Pyhton
--Streamlist
+-Streamlit
 -Skill matching logic 
 ## Future scope
 -Resume PDF upload
