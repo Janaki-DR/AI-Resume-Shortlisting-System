@@ -1,4 +1,19 @@
-import streamlit as st 
+import streamlit as st
+import pdfplumber 
+import docx
+def extract_text_from_pdf(file):
+    text = ""
+    with pdfplumber.open(file) as pdf:
+        for page in pdf.pages:
+            if page.extract_text():
+               text += page.extract_text()
+    return text
+def extract_text_from_docx(file):
+    doc = docx.Document(file)
+    text = ""
+    for para in doc.paragraphs:
+        text += para.text 
+    return text
 st.set_page_config(page_title="AI Hiring System")
 st.title("AI-Based Resume Shortlisting System")
 st.write("Company Hiring Portal")
@@ -9,12 +24,18 @@ roles={
 }
 selected_role=st.selectbox("Select Job Role", list(roles.keys()))
 threshold=st.slider("set selection threshold (%)", 50, 100, 70)
-resume_text=st.text_area("Paste Cndidate Resume Here")
+uploaded_file = st.file_uploader("Upload Candidate Resume", type=["pdf", "docx"])
 if st.button("Analyze Resume"):
-    if resume_text.strip()=="":
-        st.warning("Please paste resume text first.")
+    if uploaded_file is None:
+        st.warning("Please upload a resume file.")
     else:
+        if uploaded_file.type == "application/pdf":
+            resume_text = extract_text_from_pdf(uploaded_file)
+        elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+            resume_text = extract_text_from_docx(uploaded_file)
+        
         resume_text=resume_text.lower()
+        
         required_skills=roles[selected_role]
         matched_count=0
         matched_skills=[]
@@ -37,7 +58,7 @@ if st.button("Analyze Resume"):
             st.error("The Candidate does not meet the required skill threshold.")
             
 st.write("---")
-st.caption("This system assissts HR in resume screening. Final hiring decisions require human evaluation.")
+st.caption("This system assists HR in resume screening. Final hiring decisions require human evaluation.")
 
             
             
