@@ -41,6 +41,18 @@ def calculate_experience(text):
         return 0
     return None
 st.set_page_config(page_title="AI Hiring System")
+st.markdown("""
+    <style>
+    .stApp {
+        background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        color: white;
+    }
+    /* This makes sure all your labels and sliders are white and readable */
+    .stSlider, .stSelectbox, label, p, .stMarkdown {
+        color: white !important;
+    }
+    </style>
+    """, unsafe_allow_html=True
 st.title("AI-Based Resume Shortlisting System")
 st.write("Company Hiring Portal")
 roles={
@@ -98,3 +110,4 @@ st.caption("This system assists HR in resume screening. Final hiring decisions r
             
 
             
+
