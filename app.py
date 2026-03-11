@@ -33,15 +33,6 @@ def preprocess_text(text):
         if word.isalpha() and word not in stop_words:
             filtered_words.append(word)
     return filtered_words
-def check_salary_match(salary_text, company_limit):
-     nums = re.findall(r'\d+', salary_text.replace(',', ''))
-    if nums:
-        val = int(nums[0])
-        if val <= company_limit:
-            return f" Match: Candidate expects {val}, which is within your budget.", "success"
-        else:
-            return f" No Match: Candidate expects {val}, which exceeds your budget.", "error"
-    return " Salary not clearly stated in resume.", "info"
 def calculate_experience(text):
     match=re.search(r'(\d+)\+?\s*years?\s*(?:of\s*)?(?:experience|exp)', text.lower())
     if match:
@@ -49,7 +40,7 @@ def calculate_experience(text):
     if re.search(r'\bfresher\b|\bfresh graduate\b|\bno experience\b', text.lower()):
         return 0
     return None
-st.set_page_config(page_title="AI Hiring System")
+import streamlit as st
 st.title("AI-Based Resume Shortlisting System")
 st.write("Company Hiring Portal")
 roles={
@@ -59,7 +50,14 @@ roles={
 }
 selected_role=st.selectbox("Select Job Role", list(roles.keys()))
 threshold=st.slider("set selection threshold (%)", 50, 100, 70)
-uploaded_file = st.file_uploader("Upload Candidate Resume", type=["pdf", "docx"])
+try:
+    uploaded_file = st.file_uploader("Upload Resume", type=["pdf", "docx", "txt"])
+    if uploaded_file is not None:
+        st.success("Resume uploaded successfully")
+except Exception:
+    st.error("Unable to process the resume file")
+    uploaded_file = None
+
 if st.button("Analyze Resume"):
     if uploaded_file is None:
         st.warning("Please upload a resume file.")
@@ -99,31 +97,11 @@ if st.button("Analyze Resume"):
                 st.info("fresher")
             else:         
                 st.success(f"{exp_years} years")
-               
-                    st.markdown("---")
-                    st.subheader("Budget Alignment")
-                    max_budget = st.number_input("Set Company Max Budget for this role:", value=50000)
-                    raw_salary = extract_salary(resume_text)
-                    
-                    
-                    if raw_salary != "Not found":
-                        result_msg, result_type = check_salary_match(raw_salary, max_budget)
-                        if result_type == "success":
-                            st.success(result_msg)
-                        elif result_type == "error":
-                            st.error(result_msg)
-                        else:
-                            st.info(result_msg)
-                    else:
-                        st.warning("No salary information detected in the uploaded resume."
-                        st.write("---")
-st.caption("This system assists HR in resume screening. Final hiring decisions require human evaluation.")
-
-            
-            
+                
+           
+st.write("---")
+st.caption("This system assists HR in resume screening. Final hiring decisions require human evaluation.") 
 
             
 
-
-
-
+            
